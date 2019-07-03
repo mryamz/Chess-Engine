@@ -1,6 +1,7 @@
 package genetic_algorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import chess_engine.ChessEngine;
 import chess_engine.entities.BoardElement;
@@ -13,6 +14,8 @@ public class FitnessFunctions {
 	public static ArrayList<Float> getFitnessTrial2(Genotype genotype) {
 		ArrayList<Float> fitnessScores = new ArrayList<>();
 		ArrayList<MultilayerPerceptron> players = genotype.getPhenotype();
+
+		Collections.shuffle(genotype.population);
 
 		// play a game of chess
 		for (int i = 0; i < genotype.getN() / 2; i++) {
@@ -56,7 +59,7 @@ public class FitnessFunctions {
 				whiteFitnessValue += GeneticUtils.getPointsBasedOnTime(turn);
 			}
 
-			System.out.println("GENERATION " + (((float) (i) / (genotype.getN() / 2)) * 100) + "% complete");
+			System.out.println("GENERATION " + (((float) (i*2+1) / genotype.getN()) * 100) + "% complete");
 			System.out.println("white fitness " + whiteFitnessValue);
 			System.out.println("black fitness " + blackFitnessValue);
 

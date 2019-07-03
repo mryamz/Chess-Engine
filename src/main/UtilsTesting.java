@@ -6,6 +6,7 @@ import java.util.Arrays;
 import genetic_algorithm.Chromosome;
 import genetic_algorithm.GeneticUtils;
 import genetic_algorithm.Genotype;
+import genetic_algorithm.GenotypeInnovator;
 import perceptron.MultilayerPerceptron;
 
 public class UtilsTesting {
@@ -53,14 +54,36 @@ public class UtilsTesting {
 			}
 		}
 		System.out.println("Genetic Material: " + data.size());
-		Chromosome s1 = rand.population.get(0);
-		for (int i = 0; i < Chromosome.LENGTH; i++) {
-			if (data.contains(s1.getAllele(i))) {
-				data.remove(s1.getAllele(i));
+		{
+			Chromosome s1 = rand.population.get(0);
+			for (int i = 0; i < Chromosome.LENGTH; i++) {
+				if (data.contains(s1.getAllele(i))) {
+					data.remove(s1.getAllele(i));
+				}
 			}
 		}
 		System.out.println("Test Passed: " + (data.size() == 0) + ", thus genetic material count is " + data.size());
 
+		System.out.println("\nTEST 4 - Test Elite Integration to the proportional genetic breed system");
+		{
+			double[] x = new double[Chromosome.LENGTH];
+			double[] y = new double[Chromosome.LENGTH];
+			double[] z = new double[Chromosome.LENGTH];
+			for (int i = 0; i < Chromosome.LENGTH; i++) {
+				x[i] = 1;
+				y[i] = 2;
+				z[i] = 3;
+			}
+			Chromosome s1 = new Chromosome(x);
+			Chromosome s2 = new Chromosome(y);
+			Chromosome s3 = new Chromosome(z);
+			
+			s2.fitness_score = 6;
+			s3.fitness_score = 5;
+			s1.fitness_score = 4;
+			rand = new Genotype(new ArrayList<>(Arrays.asList(s1, s2, s3)));
+			GenotypeInnovator.createNewGenoTypeTrial3(rand, 2);
+		}
 	}
 
 }

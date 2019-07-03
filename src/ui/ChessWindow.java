@@ -46,7 +46,7 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		this.cd = cd;
 		this.deets = deets;
 		
-		Genotype pop = GenotypeInnovator.loadFromFile2("chromosomes_proportional_crossover_v5.txt", 68, 2);
+		Genotype pop = GenotypeInnovator.loadFromFile2("chromosomes_proportional_crossover_v5.txt", 1273, 2);
 		
 		ArrayList<MultilayerPerceptron> perceptrons = pop.getPhenotype();
 		whiteCom = perceptrons.get(0);

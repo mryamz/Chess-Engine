@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 public class GenotypeInnovator {
@@ -51,6 +52,7 @@ public class GenotypeInnovator {
 		}
 	}
 
+	@Deprecated
 	private static Chromosome uniformCrossoverWithProportionalGeneSwapping(Genotype lastGen) {
 		ArrayList<Float> fitnesses = lastGen.getFitnessScores();
 		GeneticUtils.normalizeSetToSumToOne(fitnesses);
@@ -63,13 +65,47 @@ public class GenotypeInnovator {
 
 		return new Chromosome(chromosomes);
 	}
-
+	
+	@Deprecated
 	public static Genotype createNewGenoTypeTrial2(Genotype lastGeneration) {
 
 		ArrayList<Chromosome> chromosomes = new ArrayList<>();
 
 		for (int i = 0; i < lastGeneration.getN(); i++) {
 			Chromosome child = uniformCrossoverWithProportionalGeneSwapping(lastGeneration);
+			bitFlipMutationDerivation(child, 0.05f);
+			chromosomes.add(child);
+		}
+
+		return new Genotype(chromosomes);
+	}
+	
+	private static Chromosome uniformCrossoverWithProportionalGeneSwappingAndElites(Genotype lastGen, int eliteCount) {
+		Collections.sort(lastGen.population, (x, y) -> x.fitness_score > y.fitness_score ? -1 : x.fitness_score < y.fitness_score ? 1 : 0);
+		ArrayList<Chromosome> elites = new ArrayList<>();
+		for(int i = 0; i < lastGen.getN(); i++) {
+			if(lastGen.population.get(i).fitness_score > 0 && i < eliteCount) {
+				elites.add(lastGen.population.get(i));
+			}
+		}
+		ArrayList<Float> fitnesses = lastGen.getFitnessScores();
+		GeneticUtils.normalizeSetToSumToOne(fitnesses);
+		double[] chromosomes = new double[Chromosome.LENGTH];
+
+		for (int i = 0; i < Chromosome.LENGTH; i++) {
+			int index = GeneticUtils.getIndexFromWeightedProbabilities(fitnesses);
+			chromosomes[i] = lastGen.population.get(index).getAllele(i);
+		}
+
+		return new Chromosome(chromosomes);
+	}
+	
+	public static Genotype createNewGenoTypeTrial3(Genotype lastGeneration, int eliteCount) {
+
+		ArrayList<Chromosome> chromosomes = new ArrayList<>();
+
+		for (int i = 0; i < lastGeneration.getN(); i++) {
+			Chromosome child = uniformCrossoverWithProportionalGeneSwappingAndElites(lastGeneration, eliteCount);
 			bitFlipMutationDerivation(child, 0.05f);
 			chromosomes.add(child);
 		}
@@ -120,6 +156,8 @@ public class GenotypeInnovator {
 		return null;
 
 	}
+	
+	
 
 	/**
 	 * 

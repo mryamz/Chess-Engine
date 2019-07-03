@@ -11,7 +11,7 @@ public class GeneticTest {
 	public static void main(String... strings) {
 
 		int startgen = 0;
-		Genotype type = new Genotype(10);
+		Genotype type = new Genotype(30);
 		type.randomlyInitPopulation();
 
 		for (int i = startgen + 1; true; i++) {
@@ -22,8 +22,8 @@ public class GeneticTest {
 					fitCount++;
 			}
 
-			GenotypeInnovator.log("chromosomes_proportional_crossover_v5.txt", type, i, type, fitCount);
-			type = GenotypeInnovator.createNewGenoTypeTrial2(type);
+			GenotypeInnovator.log("proportional_crossover_with_elites_v1.txt", type, i, type, fitCount);
+			type = GenotypeInnovator.createNewGenoTypeTrial3(type, 3);
 		}
 	}
 

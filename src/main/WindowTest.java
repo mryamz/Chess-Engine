@@ -25,7 +25,5 @@ public class WindowTest {
 		ChessWindow win = new ChessWindow((int) size, (int) size, cd, gdw);
 		gdw.setCW(win);
 		
-		//
-
 	}
 }
