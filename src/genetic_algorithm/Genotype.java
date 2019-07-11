@@ -26,10 +26,10 @@ public class Genotype {
 		return fitnesses;
 	}
 
-	public ArrayList<Float> getMaturedFitnessScores() {
+	public ArrayList<Float> getAccumScores() {
 		ArrayList<Float> fitnesses = new ArrayList<>();
 		for (int i = 0; i < population.size(); i++) {
-			fitnesses.add(population.get(i).getAverageFitness());
+			fitnesses.add(population.get(i).accumulative_fitness_score);
 		}
 		return fitnesses;
 	}
@@ -105,5 +105,11 @@ public class Genotype {
 	 */
 	public int getOriginalValueN() {
 		return n;
+	}
+
+	public void increaseAges() {
+		for (int i = 0; i < n; i++) {
+			population.get(i).age++;
+		}
 	}
 }

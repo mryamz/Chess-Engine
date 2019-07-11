@@ -66,31 +66,11 @@ public class GenotypeInnovator {
 		return new Chromosome(chromosomes);
 	}
 
-	/**
-	 * 
-	 * @param lastGen
-	 * @param isHasty,
-	 *            when true logic considers fitness with respect to age, rather
-	 *            than a less rigorous instantaneous fitness judgment
-	 * @return a new generation
-	 */
-	private static Chromosome uniformCrossoverWithProportionalGeneSwapping(Genotype lastGen, boolean isHasty) {
-		ArrayList<Float> fitnesses = isHasty ? lastGen.getFitnessScores() : lastGen.getMaturedFitnessScores();
-		GeneticUtils.normalizeSetToSumToOne(fitnesses);
-		double[] chromosomes = new double[Chromosome.LENGTH];
-
-		for (int i = 0; i < Chromosome.LENGTH; i++) {
-			int index = GeneticUtils.getIndexFromWeightedProbabilities(fitnesses);
-			chromosomes[i] = lastGen.population.get(index).getAllele(i);
-		}
-
-		return new Chromosome(chromosomes);
-	}
-
 	private static Chromosome uniformWeightedCrossover(ArrayList<Chromosome> parent_chromosomes, ArrayList<Float> weights) {
 		double[] chromosomes = new double[Chromosome.LENGTH];
 
 		for (int i = 0; i < Chromosome.LENGTH; i++) {
+			GeneticUtils.normalizeSetToSumToOne(weights);
 			int index = GeneticUtils.getIndexFromWeightedProbabilities(weights);
 			chromosomes[i] = parent_chromosomes.get(index).getAllele(i);
 		}
@@ -135,15 +115,15 @@ public class GenotypeInnovator {
 	}
 
 	public static Genotype createNewGenoTypeTrial4(Genotype lastGeneration) {
-		// sort chromosomes by ave fitnesss
-		Collections.sort(lastGeneration.population, (x, y) -> x.getAverageFitness() > y.getAverageFitness() ? -1 : x.getAverageFitness() < y.getAverageFitness() ? 1 : 0);
-
+		boolean hasPurified = false;
+		int judgementAge = 10;
 		// determine chromosome's worthiness only after it has obtained a
 		// certain mature age
 		for (int i = 0; i < lastGeneration.population.size(); i++) {
-			if (lastGeneration.population.get(i).age > 10 && lastGeneration.population.get(i).getAverageFitness() == 0) {
+			if (lastGeneration.population.get(i).age > judgementAge && lastGeneration.population.get(i).getAverageFitness() == 0) {
 				// then this chromosome is retarded and needs to be "purified"
 				lastGeneration.population.remove(i);
+				hasPurified = true;
 				break;
 			}
 		}
@@ -151,32 +131,33 @@ public class GenotypeInnovator {
 		// if the population size is still equal to the getN(), then everyone
 		// has checkmated before
 		// thus the worst chromosome should leave the gene pool
-		if (lastGeneration.population.size() == lastGeneration.getOriginalValueN()) {
-			ArrayList<Float> fair_consideration = new ArrayList<>();
-			ArrayList<Float> normalizedAges = lastGeneration.getAges();
-			GeneticUtils.normalizeSetToSumToOne(normalizedAges);
-			for (int i = 0; i < lastGeneration.getOriginalValueN(); i++) {
-				fair_consideration.add(normalizedAges.get(i) * lastGeneration.population.get(i).accumulative_fitness_score);
-			}
+		ArrayList<Float> fair_consideration = new ArrayList<>();
+		ArrayList<Float> normalizedAges = lastGeneration.getAges();
+		GeneticUtils.normalizeSetToSumToOne(normalizedAges);
+		for (int i = 0; i < lastGeneration.population.size(); i++) {
+			fair_consideration.add(normalizedAges.get(i) * lastGeneration.population.get(i).accumulative_fitness_score);
+		}
 
+		if (!hasPurified) {
 			int leastFitIndex = GeneticUtils.findIndexOfSmallestValue(fair_consideration);
+			if (lastGeneration.population.get(leastFitIndex).age > judgementAge) {
+				Chromosome child = uniformWeightedCrossover(lastGeneration.population, fair_consideration);
+				bitFlipMutationRealNumberDerivation(child, 0.035f);
+				lastGeneration.population.remove(leastFitIndex);
+				lastGeneration.population.add(child);
+			}
+		} else {
+			// add new children after purification
 			Chromosome child = uniformWeightedCrossover(lastGeneration.population, fair_consideration);
-			bitFlipMutationRealNumberDerivation(child, 0.035f);
-			lastGeneration.population.remove(leastFitIndex);
+			bitFlipMutationRealNumberDerivation(child, 0.15f);
 			lastGeneration.population.add(child);
 		}
 
-		ArrayList<Chromosome> chromosomes = new ArrayList<>();
-		chromosomes.addAll(lastGeneration.population);
-
-		// add new children after purification
-		for (int i = 0; i < lastGeneration.getOriginalValueN() - lastGeneration.population.size(); i++) {
-			Chromosome child = uniformCrossoverWithProportionalGeneSwapping(lastGeneration, false);
-			bitFlipMutationRealNumberDerivation(child, 0.05f);
-			chromosomes.add(child);
+		if (lastGeneration.population.size() != lastGeneration.getOriginalValueN()) {
+			throw new IllegalArgumentException();
 		}
 
-		return new Genotype(chromosomes);
+		return new Genotype(lastGeneration.population);
 	}
 
 	@Deprecated

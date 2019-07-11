@@ -36,6 +36,9 @@ public class UtilsTesting {
 				float value = probs.get(index);
 				probs.set(index, ++value);
 			}
+			System.out.println(probs);
+			GeneticUtils.normalizeSetToSumToOne(probs);
+			System.out.println(probs);
 			GeneticUtils.normalizeSetToSumToOne(probs);
 			System.out.println(probs);
 		}

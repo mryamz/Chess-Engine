@@ -59,17 +59,15 @@ public class FitnessFunctions {
 				whiteFitnessValue += GeneticUtils.getPointsBasedOnTime(turn);
 			}
 
-			System.out.println("GENERATION " + (int)(((float) (i*2+1) / (genotype.getOriginalValueN()-1)) * 100) + "% complete");
-			System.out.println("white fitness " + whiteFitnessValue);
-			System.out.println("black fitness " + blackFitnessValue);
-
 			genotype.population.get(i * 2).instantaneous_fitness_score = whiteFitnessValue;
+			genotype.population.get(i * 2).accumulative_fitness_score += whiteFitnessValue;
+			
 			genotype.population.get(i * 2 + 1).instantaneous_fitness_score = blackFitnessValue;
+			genotype.population.get(i * 2 + 1).accumulative_fitness_score += blackFitnessValue;
 
 			fitnessScores.add(whiteFitnessValue);
 			fitnessScores.add(blackFitnessValue);
-			System.out.println(fitnessScores);
-			System.out.println();
+
 		}
 
 		return fitnessScores;
