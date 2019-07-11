@@ -18,7 +18,7 @@ public class FitnessFunctions {
 		Collections.shuffle(genotype.population);
 
 		// play a game of chess
-		for (int i = 0; i < genotype.getN() / 2; i++) {
+		for (int i = 0; i < genotype.getOriginalValueN() / 2; i++) {
 			float whiteFitnessValue = 0;
 			float blackFitnessValue = 0;
 
@@ -59,12 +59,12 @@ public class FitnessFunctions {
 				whiteFitnessValue += GeneticUtils.getPointsBasedOnTime(turn);
 			}
 
-			System.out.println("GENERATION " + (((float) (i*2+1) / genotype.getN()) * 100) + "% complete");
+			System.out.println("GENERATION " + (int)(((float) (i*2+1) / (genotype.getOriginalValueN()-1)) * 100) + "% complete");
 			System.out.println("white fitness " + whiteFitnessValue);
 			System.out.println("black fitness " + blackFitnessValue);
 
-			genotype.population.get(i * 2).fitness_score = whiteFitnessValue;
-			genotype.population.get(i * 2 + 1).fitness_score = blackFitnessValue;
+			genotype.population.get(i * 2).instantaneous_fitness_score = whiteFitnessValue;
+			genotype.population.get(i * 2 + 1).instantaneous_fitness_score = blackFitnessValue;
 
 			fitnessScores.add(whiteFitnessValue);
 			fitnessScores.add(blackFitnessValue);

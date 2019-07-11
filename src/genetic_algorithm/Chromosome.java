@@ -6,7 +6,9 @@ public class Chromosome {
 
 	public static final int LENGTH = (63 * 64 + 5) * 2;
 
-	public float fitness_score;
+	public float instantaneous_fitness_score;
+	public float accumulative_fitness_score;
+	public int age = 0;
 
 	private double[] chromosomes;
 
@@ -44,5 +46,9 @@ public class Chromosome {
 		}
 
 		return mp;
+	}
+
+	public float getAverageFitness() {
+		return accumulative_fitness_score / age;
 	}
 }

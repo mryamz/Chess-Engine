@@ -21,16 +21,32 @@ public class Genotype {
 	public ArrayList<Float> getFitnessScores() {
 		ArrayList<Float> fitnesses = new ArrayList<>();
 		for (int i = 0; i < population.size(); i++) {
-			fitnesses.add(population.get(i).fitness_score);
+			fitnesses.add(population.get(i).instantaneous_fitness_score);
 		}
 		return fitnesses;
+	}
+
+	public ArrayList<Float> getMaturedFitnessScores() {
+		ArrayList<Float> fitnesses = new ArrayList<>();
+		for (int i = 0; i < population.size(); i++) {
+			fitnesses.add(population.get(i).getAverageFitness());
+		}
+		return fitnesses;
+	}
+
+	public ArrayList<Float> getAges() {
+		ArrayList<Float> ages = new ArrayList<>();
+		for (int i = 0; i < population.size(); i++) {
+			ages.add((float) population.get(i).age);
+		}
+		return ages;
 	}
 
 	public float getAverageFitness() {
 		float ave = 0;
 
 		for (Chromosome some : population) {
-			ave += some.fitness_score;
+			ave += some.instantaneous_fitness_score;
 		}
 
 		return ave / n;
@@ -57,12 +73,19 @@ public class Genotype {
 		return phenos;
 	}
 
+	/**
+	 * 
+	 * @param shouldPop
+	 *            modifies fixed constant N
+	 * @return
+	 */
+	@Deprecated
 	public Chromosome popMostFitSolution(boolean shouldPop) {
 		int maxIndex = 0;
 		float maxValue = 0;
 		for (int i = 0; i < n; i++) {
-			if (population.get(i).fitness_score > maxValue) {
-				maxValue = population.get(i).fitness_score;
+			if (population.get(i).instantaneous_fitness_score > maxValue) {
+				maxValue = population.get(i).instantaneous_fitness_score;
 				maxIndex = i;
 			}
 		}
@@ -75,7 +98,12 @@ public class Genotype {
 		return c;
 	}
 
-	public int getN() {
+	/**
+	 * The original population size
+	 * 
+	 * @return
+	 */
+	public int getOriginalValueN() {
 		return n;
 	}
 }

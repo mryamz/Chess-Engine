@@ -11,19 +11,21 @@ public class GeneticTest {
 	public static void main(String... strings) {
 
 		int startgen = 0;
-		Genotype type = new Genotype(30);
+		Genotype type = new Genotype(20);
 		type.randomlyInitPopulation();
 
 		for (int i = startgen + 1; true; i++) {
 			ArrayList<Float> values = FitnessFunctions.getFitnessTrial2(type);
+			
+			// not really part of the algorithm just interesting metadata for the log file
 			int fitCount = 0;
 			for (Float f : values) {
 				if (f != 0)
 					fitCount++;
 			}
 
-			GenotypeInnovator.log("proportional_crossover_with_elites_v1.txt", type, i, type, fitCount);
-			type = GenotypeInnovator.createNewGenoTypeTrial3(type, 3);
+			GenotypeInnovator.log("new_test_v1.txt", type, i, type, fitCount);
+			type = GenotypeInnovator.createNewGenoTypeTrial4(type);
 		}
 	}
 

@@ -34,7 +34,7 @@ public class GenotypeInnovator {
 
 		for (int i = 0; i < 8; i++) {
 			Chromosome child = uniformCrossover(p1, p2);
-			bitFlipMutationDerivation(child, .025f);
+			bitFlipMutationRealNumberDerivation(child, .025f);
 			chromosomes.add(child);
 		}
 
@@ -44,9 +44,9 @@ public class GenotypeInnovator {
 		return new Genotype(chromosomes);
 	}
 
-	private static void bitFlipMutationDerivation(Chromosome target, float percentAsDecimal) {
+	private static void bitFlipMutationRealNumberDerivation(Chromosome target, float percentAsDecimal) {
 		for (int i = 0; i < Chromosome.LENGTH; i++) {
-			if (Math.random() < .025) {
+			if (Math.random() < percentAsDecimal) {
 				target.setAllele(i, (Math.random() * 2) - 1);
 			}
 		}
@@ -65,30 +65,17 @@ public class GenotypeInnovator {
 
 		return new Chromosome(chromosomes);
 	}
-	
-	@Deprecated
-	public static Genotype createNewGenoTypeTrial2(Genotype lastGeneration) {
 
-		ArrayList<Chromosome> chromosomes = new ArrayList<>();
-
-		for (int i = 0; i < lastGeneration.getN(); i++) {
-			Chromosome child = uniformCrossoverWithProportionalGeneSwapping(lastGeneration);
-			bitFlipMutationDerivation(child, 0.05f);
-			chromosomes.add(child);
-		}
-
-		return new Genotype(chromosomes);
-	}
-	
-	private static Chromosome uniformCrossoverWithProportionalGeneSwappingAndElites(Genotype lastGen, int eliteCount) {
-		Collections.sort(lastGen.population, (x, y) -> x.fitness_score > y.fitness_score ? -1 : x.fitness_score < y.fitness_score ? 1 : 0);
-		ArrayList<Chromosome> elites = new ArrayList<>();
-		for(int i = 0; i < lastGen.getN(); i++) {
-			if(lastGen.population.get(i).fitness_score > 0 && i < eliteCount) {
-				elites.add(lastGen.population.get(i));
-			}
-		}
-		ArrayList<Float> fitnesses = lastGen.getFitnessScores();
+	/**
+	 * 
+	 * @param lastGen
+	 * @param isHasty,
+	 *            when true logic considers fitness with respect to age, rather
+	 *            than a less rigorous instantaneous fitness judgment
+	 * @return a new generation
+	 */
+	private static Chromosome uniformCrossoverWithProportionalGeneSwapping(Genotype lastGen, boolean isHasty) {
+		ArrayList<Float> fitnesses = isHasty ? lastGen.getFitnessScores() : lastGen.getMaturedFitnessScores();
 		GeneticUtils.normalizeSetToSumToOne(fitnesses);
 		double[] chromosomes = new double[Chromosome.LENGTH];
 
@@ -99,14 +86,93 @@ public class GenotypeInnovator {
 
 		return new Chromosome(chromosomes);
 	}
-	
-	public static Genotype createNewGenoTypeTrial3(Genotype lastGeneration, int eliteCount) {
+
+	private static Chromosome uniformWeightedCrossover(ArrayList<Chromosome> parent_chromosomes, ArrayList<Float> weights) {
+		double[] chromosomes = new double[Chromosome.LENGTH];
+
+		for (int i = 0; i < Chromosome.LENGTH; i++) {
+			int index = GeneticUtils.getIndexFromWeightedProbabilities(weights);
+			chromosomes[i] = parent_chromosomes.get(index).getAllele(i);
+		}
+
+		return new Chromosome(chromosomes);
+	}
+
+	@Deprecated
+	public static Genotype createNewGenoTypeTrial2(Genotype lastGeneration) {
 
 		ArrayList<Chromosome> chromosomes = new ArrayList<>();
 
-		for (int i = 0; i < lastGeneration.getN(); i++) {
-			Chromosome child = uniformCrossoverWithProportionalGeneSwappingAndElites(lastGeneration, eliteCount);
-			bitFlipMutationDerivation(child, 0.05f);
+		for (int i = 0; i < lastGeneration.getOriginalValueN(); i++) {
+			Chromosome child = uniformCrossoverWithProportionalGeneSwapping(lastGeneration);
+			bitFlipMutationRealNumberDerivation(child, 0.05f);
+			chromosomes.add(child);
+		}
+
+		return new Genotype(chromosomes);
+	}
+
+	@Deprecated
+	public static Genotype createNewGenoTypeTrial3(Genotype lastGeneration, int eliteCount) {
+		Collections.sort(lastGeneration.population, (x, y) -> x.instantaneous_fitness_score > y.instantaneous_fitness_score ? -1 : x.instantaneous_fitness_score < y.instantaneous_fitness_score ? 1 : 0);
+		ArrayList<Chromosome> elites = new ArrayList<>();
+		for (int i = 0; i < lastGeneration.getOriginalValueN(); i++) {
+			if (lastGeneration.population.get(i).instantaneous_fitness_score > 0 && i < eliteCount) {
+				elites.add(lastGeneration.population.get(i));
+			}
+		}
+
+		ArrayList<Chromosome> chromosomes = new ArrayList<>();
+		chromosomes.addAll(elites);
+
+		for (int i = 0; i < lastGeneration.getOriginalValueN() - elites.size(); i++) {
+			Chromosome child = uniformCrossoverWithProportionalGeneSwapping(lastGeneration);
+			bitFlipMutationRealNumberDerivation(child, 0.1f);
+			chromosomes.add(child);
+		}
+
+		return new Genotype(chromosomes);
+	}
+
+	public static Genotype createNewGenoTypeTrial4(Genotype lastGeneration) {
+		// sort chromosomes by ave fitnesss
+		Collections.sort(lastGeneration.population, (x, y) -> x.getAverageFitness() > y.getAverageFitness() ? -1 : x.getAverageFitness() < y.getAverageFitness() ? 1 : 0);
+
+		// determine chromosome's worthiness only after it has obtained a
+		// certain mature age
+		for (int i = 0; i < lastGeneration.population.size(); i++) {
+			if (lastGeneration.population.get(i).age > 10 && lastGeneration.population.get(i).getAverageFitness() == 0) {
+				// then this chromosome is retarded and needs to be "purified"
+				lastGeneration.population.remove(i);
+				break;
+			}
+		}
+
+		// if the population size is still equal to the getN(), then everyone
+		// has checkmated before
+		// thus the worst chromosome should leave the gene pool
+		if (lastGeneration.population.size() == lastGeneration.getOriginalValueN()) {
+			ArrayList<Float> fair_consideration = new ArrayList<>();
+			ArrayList<Float> normalizedAges = lastGeneration.getAges();
+			GeneticUtils.normalizeSetToSumToOne(normalizedAges);
+			for (int i = 0; i < lastGeneration.getOriginalValueN(); i++) {
+				fair_consideration.add(normalizedAges.get(i) * lastGeneration.population.get(i).accumulative_fitness_score);
+			}
+
+			int leastFitIndex = GeneticUtils.findIndexOfSmallestValue(fair_consideration);
+			Chromosome child = uniformWeightedCrossover(lastGeneration.population, fair_consideration);
+			bitFlipMutationRealNumberDerivation(child, 0.035f);
+			lastGeneration.population.remove(leastFitIndex);
+			lastGeneration.population.add(child);
+		}
+
+		ArrayList<Chromosome> chromosomes = new ArrayList<>();
+		chromosomes.addAll(lastGeneration.population);
+
+		// add new children after purification
+		for (int i = 0; i < lastGeneration.getOriginalValueN() - lastGeneration.population.size(); i++) {
+			Chromosome child = uniformCrossoverWithProportionalGeneSwapping(lastGeneration, false);
+			bitFlipMutationRealNumberDerivation(child, 0.05f);
 			chromosomes.add(child);
 		}
 
@@ -145,7 +211,7 @@ public class GenotypeInnovator {
 					pop.add(c2);
 					for (int i = 0; i < 8; i++) {
 						pop.add(uniformCrossover(c1, c2));
-						bitFlipMutationDerivation(pop.get(i), mutationRate);
+						bitFlipMutationRealNumberDerivation(pop.get(i), mutationRate);
 					}
 					return new Genotype(pop);
 				}
@@ -156,8 +222,6 @@ public class GenotypeInnovator {
 		return null;
 
 	}
-	
-	
 
 	/**
 	 * 
@@ -167,14 +231,15 @@ public class GenotypeInnovator {
 	 * @param type
 	 * @param nonZeroFitness
 	 * 
-	 * Logs data into csv file: GENERATION,DIVERSITY,FIT_COUNT,AVG_GENOTYPE_FITNESS,CHROMOSOME
+	 *            Logs data into csv file:
+	 *            GENERATION,DIVERSITY,FIT_COUNT,AVG_GENOTYPE_FITNESS,CHROMOSOME
 	 */
 	public static void log(String filename, Genotype g, int generation, Genotype type, int nonZeroFitness) {
 
 		StringBuilder sb = new StringBuilder();
 		Chromosome target = g.popMostFitSolution(false);
 
-		//GENERATION,DIVERSITY,FIT_COUNT,AVG_GENOTYPE_FITNESS,CHROMOSOME
+		// GENERATION,DIVERSITY,FIT_COUNT,AVG_GENOTYPE_FITNESS,CHROMOSOME
 		sb.append(generation).append(",").append(GeneticUtils.measure_diverisity(type.population)).append(",").append(nonZeroFitness).append(",").append(g.getAverageFitness()).append(",");
 		for (int i = 0; i < Chromosome.LENGTH; i++) {
 			sb.append(target.getAllele(i) + " ");
@@ -214,7 +279,7 @@ public class GenotypeInnovator {
 		}
 
 		Chromosome some = new Chromosome(chromo);
-		some.fitness_score = fitness;
+		some.instantaneous_fitness_score = fitness;
 		return some;
 	}
 

@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -25,12 +26,14 @@ public class Resources {
 		try {
 
 			blackBishop = ImageIO.read(Class.class.getResource("/blackBishop.png"));
-			blackKing = ImageIO.read(Class.class.getResource("/blackKing.png"));
+			
+			
+			blackKing = ImageIO.read(new File("C:\\Users\\admin\\workspace\\Chess-Engine\\res\\blackBishop.png"));
+			
 			blackKnight = ImageIO.read(Class.class.getResource("/blackKnight.png"));
 			blackPawn = ImageIO.read(Class.class.getResource("/blackPawn.png"));
 			blackRook = ImageIO.read(Class.class.getResource("/blackRook.png"));
 			blackQueen = ImageIO.read(Class.class.getResource("/blackQueen.png"));
-
 			whiteBishop = ImageIO.read(Class.class.getResource("/whiteBishop.png"));
 			whiteKing = ImageIO.read(Class.class.getResource("/whiteKing.png"));
 			whiteKnight = ImageIO.read(Class.class.getResource("/whiteKnight.png"));
