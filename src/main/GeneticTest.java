@@ -26,10 +26,10 @@ public class GeneticTest {
 					fitCount++;
 			}
 
-			System.out.println(String.format("Gen. %s, Div. %s, Pop. %s, Metadata %s: \n---------------\n*      Instant Fitness - %s\n* Accumulated Fitness: - %s\n*                   Age - %s\n\n-------------------------------------------------", i, GeneticUtils.measure_diverisity(type.population), type.population.size(), fitCount, type.getFitnessScores(), type.getAccumScores(), type.getAges()));
+			System.out.println(String.format("Gen. %s, Div. %s, Pop. %s, Metadata %s: \n---------------\n*      Instant Fitness - %s\n* Accumulated Fitness: - %s\n*                  Age - %s\n\n-------------------------------------------------", i, GeneticUtils.measure_diverisity(type.population), type.population.size(), fitCount, type.getFitnessScores(), type.getAccumScores(), type.getAges()));
 
-			GenotypeInnovator.log("new_test_v1.txt", type, i, type, fitCount);
-			type = GenotypeInnovator.createNewGenoTypeTrial4(type);
+			GenotypeInnovator.log("new_test_v2.txt", type, i, type, fitCount);
+			type = GenotypeInnovator.createNewGenoTypeTrial5(type);
 		}
 	}
 

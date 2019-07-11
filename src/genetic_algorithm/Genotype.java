@@ -34,6 +34,14 @@ public class Genotype {
 		return fitnesses;
 	}
 
+	public ArrayList<Float> getAverageFitnessScores() {
+		ArrayList<Float> fitnesses = new ArrayList<>();
+		for (int i = 0; i < population.size(); i++) {
+			fitnesses.add(population.get(i).accumulative_fitness_score / population.get(i).age);
+		}
+		return fitnesses;
+	}
+
 	public ArrayList<Float> getAges() {
 		ArrayList<Float> ages = new ArrayList<>();
 		for (int i = 0; i < population.size(); i++) {

@@ -66,11 +66,19 @@ public class GenotypeInnovator {
 		return new Chromosome(chromosomes);
 	}
 
+	/**
+	 * 
+	 * @param parent_chromosomes
+	 * @param weights
+	 *            values must add up to one
+	 * @return
+	 */
 	private static Chromosome uniformWeightedCrossover(ArrayList<Chromosome> parent_chromosomes, ArrayList<Float> weights) {
 		double[] chromosomes = new double[Chromosome.LENGTH];
+		if (GeneticUtils.getSumUpTo(weights, weights.size()) != 1)
+			throw new IllegalArgumentException("Weights must add to one");
 
 		for (int i = 0; i < Chromosome.LENGTH; i++) {
-			GeneticUtils.normalizeSetToSumToOne(weights);
 			int index = GeneticUtils.getIndexFromWeightedProbabilities(weights);
 			chromosomes[i] = parent_chromosomes.get(index).getAllele(i);
 		}
@@ -114,6 +122,7 @@ public class GenotypeInnovator {
 		return new Genotype(chromosomes);
 	}
 
+	@Deprecated
 	public static Genotype createNewGenoTypeTrial4(Genotype lastGeneration) {
 		boolean hasPurified = false;
 		int judgementAge = 10;
@@ -121,7 +130,8 @@ public class GenotypeInnovator {
 		// certain mature age
 		for (int i = 0; i < lastGeneration.population.size(); i++) {
 			if (lastGeneration.population.get(i).age > judgementAge && lastGeneration.population.get(i).getAverageFitness() == 0) {
-				// then this chromosome is retarded and needs to be "purified"
+				// then this chromosome seems retarded and needs to be
+				// "purified," so to speak
 				lastGeneration.population.remove(i);
 				hasPurified = true;
 				break;
@@ -131,25 +141,56 @@ public class GenotypeInnovator {
 		// if the population size is still equal to the getN(), then everyone
 		// has checkmated before
 		// thus the worst chromosome should leave the gene pool
-		ArrayList<Float> fair_consideration = new ArrayList<>();
+		ArrayList<Float> awaf = new ArrayList<>();// age weighted average
+													// fitness (awaf)
 		ArrayList<Float> normalizedAges = lastGeneration.getAges();
 		GeneticUtils.normalizeSetToSumToOne(normalizedAges);
 		for (int i = 0; i < lastGeneration.population.size(); i++) {
-			fair_consideration.add(normalizedAges.get(i) * lastGeneration.population.get(i).accumulative_fitness_score);
+			awaf.add(normalizedAges.get(i) * lastGeneration.population.get(i).accumulative_fitness_score);
 		}
 
 		if (!hasPurified) {
-			int leastFitIndex = GeneticUtils.findIndexOfSmallestValue(fair_consideration);
+			int leastFitIndex = GeneticUtils.findIndexOfSmallestValue(awaf);
 			if (lastGeneration.population.get(leastFitIndex).age > judgementAge) {
-				Chromosome child = uniformWeightedCrossover(lastGeneration.population, fair_consideration);
+				Chromosome child = uniformWeightedCrossover(lastGeneration.population, awaf);
 				bitFlipMutationRealNumberDerivation(child, 0.035f);
 				lastGeneration.population.remove(leastFitIndex);
 				lastGeneration.population.add(child);
 			}
 		} else {
 			// add new children after purification
-			Chromosome child = uniformWeightedCrossover(lastGeneration.population, fair_consideration);
+			Chromosome child = uniformWeightedCrossover(lastGeneration.population, awaf);
 			bitFlipMutationRealNumberDerivation(child, 0.15f);
+			lastGeneration.population.add(child);
+		}
+
+		if (lastGeneration.population.size() != lastGeneration.getOriginalValueN()) {
+			throw new IllegalArgumentException();
+		}
+
+		return new Genotype(lastGeneration.population);
+	}
+
+	public static Genotype createNewGenoTypeTrial5(Genotype lastGeneration) {
+
+		int judgementAge = 10;
+		boolean allMatureEnough = true;
+		ArrayList<Float> averageFitness = lastGeneration.getAverageFitnessScores();
+		ArrayList<Float> accumsFitness = lastGeneration.getAccumScores();
+
+		for (int i = 0; i < lastGeneration.getOriginalValueN(); i++) {
+			if (lastGeneration.population.get(i).age < judgementAge) {
+				allMatureEnough = false;
+				break;
+			}
+		}
+
+		if (allMatureEnough) {
+			int worst = GeneticUtils.findIndexOfSmallestValue(averageFitness);
+			GeneticUtils.normalizeSetToSumToOne(accumsFitness);
+			Chromosome child = uniformWeightedCrossover(lastGeneration.population, accumsFitness);
+			bitFlipMutationRealNumberDerivation(child, 0.035f);
+			lastGeneration.population.remove(worst);
 			lastGeneration.population.add(child);
 		}
 
