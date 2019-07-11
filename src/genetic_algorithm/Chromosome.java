@@ -5,6 +5,8 @@ import perceptron.MultilayerPerceptron;
 public class Chromosome {
 
 	public static final int LENGTH = (63 * 64 + 5) * 2;
+	private static int instance_counter;
+	private int id;
 
 	public float instantaneous_fitness_score;
 	public float accumulative_fitness_score;
@@ -14,6 +16,7 @@ public class Chromosome {
 
 	public Chromosome(double[] chromosomes) {
 		this.chromosomes = chromosomes;
+		id = ++instance_counter;
 	}
 
 	public double getAllele(int gene) {
@@ -50,5 +53,9 @@ public class Chromosome {
 
 	public float getAverageFitness() {
 		return accumulative_fitness_score / age;
+	}
+
+	public String getID() {
+		return "c" + id;
 	}
 }

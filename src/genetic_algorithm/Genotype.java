@@ -50,6 +50,14 @@ public class Genotype {
 		return ages;
 	}
 
+	public ArrayList<String> getNames() {
+		ArrayList<String> names = new ArrayList<>();
+		for (int i = 0; i < population.size(); i++) {
+			names.add(population.get(i).getID());
+		}
+		return names;
+	}
+
 	public float getAverageFitness() {
 		float ave = 0;
 

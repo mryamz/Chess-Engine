@@ -75,7 +75,7 @@ public class GenotypeInnovator {
 	 */
 	private static Chromosome uniformWeightedCrossover(ArrayList<Chromosome> parent_chromosomes, ArrayList<Float> weights) {
 		double[] chromosomes = new double[Chromosome.LENGTH];
-		if (GeneticUtils.getSumUpTo(weights, weights.size()) != 1)
+		if (GeneticUtils.getSumUpTo(weights, weights.size()-1) != 1)
 			throw new IllegalArgumentException("Weights must add to one");
 
 		for (int i = 0; i < Chromosome.LENGTH; i++) {
