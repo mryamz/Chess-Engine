@@ -72,7 +72,7 @@ public class GenotypeInnovator {
 
 		double errorCheck = GeneticUtils.getSumUpTo(weights, weights.size() - 1);
 		if (errorCheck != 1)
-			throw new IllegalArgumentException("Weights must add to one, not " + errorCheck);
+			System.err.println("Possible error, the set didn't normalize to 1: " + errorCheck);
 
 		for (int i = 0; i < Chromosome.LENGTH; i++) {
 			int index = GeneticUtils.getIndexFromWeightedProbabilities(weights);

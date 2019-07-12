@@ -48,12 +48,15 @@ public class FitnessFunctions {
 			turn++;
 		}
 
+		boolean mate = false;
 		if (gameOverListener.getFinish_state() == Chessboard.BLACK_WINS_BY_CHECKMATE_STATE) {
 			blackFitnessValue += GeneticUtils.getPointsBasedOnTime(turn);
+			mate = true;
 		}
 
 		if (gameOverListener.getFinish_state() == Chessboard.WHITE_WINS_BY_CHECKMATE_STATE) {
 			whiteFitnessValue += GeneticUtils.getPointsBasedOnTime(turn);
+			mate = true;
 		}
 
 		genotype.population.get(i * 2).instantaneous_fitness_score = whiteFitnessValue;
@@ -62,7 +65,7 @@ public class FitnessFunctions {
 		genotype.population.get(i * 2 + 1).instantaneous_fitness_score = blackFitnessValue;
 		genotype.population.get(i * 2 + 1).accumulative_fitness_score += blackFitnessValue;
 
-		System.out.println("Ended " + genotype.population.get(i * 2).getID() + " vs " + genotype.population.get(i * 2 + 1).getID());
+		System.out.println("Ended " + genotype.population.get(i * 2).getID() + " vs " + genotype.population.get(i * 2 + 1).getID() + " " + (mate ? "checkmate" : ""));
 	}
 
 	public static void getFitnessTrial3(Genotype genotype) {

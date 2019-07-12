@@ -2,6 +2,7 @@ package genetic_algorithm;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -138,7 +139,7 @@ public class GeneticsIO {
 		for (int i = 0; i < type.population.size(); i++) {
 			Chromosome member = type.population.get(i);
 
-			sb.append(member.getID()).append(",").append(member.accumulative_fitness_score).append(",");
+			sb.append(member.getID()).append(",").append(member.accumulative_fitness_score).append(",").append(member.age).append(",");
 			for (int j = 0; j < Chromosome.LENGTH; j++) {
 				sb.append(member.getAllele(j)).append(" ");
 			}
@@ -155,4 +156,36 @@ public class GeneticsIO {
 		}
 	}
 
+	public static Chromosome parseChromosomeFromString(String chromosome) {
+		String[] alleles_str = chromosome.split(" ");
+		double[] alleles = new double[Chromosome.LENGTH];
+		for (int i = 0; i < Chromosome.LENGTH; i++) {
+			alleles[i] = Double.parseDouble(alleles_str[i]);
+		}
+		return new Chromosome(alleles);
+	}
+
+	public static Genotype loadSaveFile(String path, int[] gen) {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(new File(path)));
+			int generation = Integer.parseInt(reader.readLine());
+			gen[0] = generation;
+			int pop_size = Integer.parseInt(reader.readLine());
+			ArrayList<Chromosome> chromos = new ArrayList<>();
+			for (int i = 0; i < pop_size; i++) {
+				String[] data = reader.readLine().split(",");
+				Chromosome c = parseChromosomeFromString(data[3]);
+				c.setID(Integer.parseInt(data[0].substring(1)));
+				c.accumulative_fitness_score = Float.parseFloat(data[1]);
+				c.age = Integer.parseInt(data[2]);
+				chromos.add(c);
+			}
+			reader.close();
+			return new Genotype(chromos);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 }

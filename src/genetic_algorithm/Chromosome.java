@@ -58,4 +58,11 @@ public class Chromosome {
 	public String getID() {
 		return "c" + id;
 	}
+
+	public void setID(int id) {
+		this.id = id;
+		if (id > instance_counter) {
+			instance_counter = id;
+		}
+	}
 }
