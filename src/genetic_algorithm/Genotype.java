@@ -100,8 +100,8 @@ public class Genotype {
 		int maxIndex = 0;
 		float maxValue = 0;
 		for (int i = 0; i < n; i++) {
-			if (population.get(i).instantaneous_fitness_score > maxValue) {
-				maxValue = population.get(i).instantaneous_fitness_score;
+			if (population.get(i).accumulative_fitness_score > maxValue) {
+				maxValue = population.get(i).accumulative_fitness_score;
 				maxIndex = i;
 			}
 		}

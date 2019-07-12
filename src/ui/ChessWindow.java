@@ -49,9 +49,8 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		int gen[] = new int[1];
 		Genotype pop = GeneticsIO.loadSaveFile("save_test.data", gen);
 
-		ArrayList<MultilayerPerceptron> perceptrons = pop.getPhenotype();
-		whiteCom = perceptrons.get(0);
-		blackCom = perceptrons.get(1);
+		whiteCom = pop.popMostFitSolution(true).getPerceptron();
+		blackCom = pop.popMostFitSolution(true).getPerceptron();
 
 		cd.addOnTurnCompleteListener(new OnTurnCompleteListener() {
 

@@ -26,10 +26,7 @@ public class Resources {
 		try {
 
 			blackBishop = ImageIO.read(Class.class.getResource("/blackBishop.png"));
-			
-			
-			blackKing = ImageIO.read(new File("C:\\Users\\admin\\workspace\\Chess-Engine\\res\\blackBishop.png"));
-			
+			blackKing = ImageIO.read(Class.class.getResource("/blackKing.png"));
 			blackKnight = ImageIO.read(Class.class.getResource("/blackKnight.png"));
 			blackPawn = ImageIO.read(Class.class.getResource("/blackPawn.png"));
 			blackRook = ImageIO.read(Class.class.getResource("/blackRook.png"));
