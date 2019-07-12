@@ -167,6 +167,10 @@ public class GenotypeInnovator {
 		return new Genotype(lastGeneration.population);
 	}
 
+	@Deprecated
+	/**
+	 * 
+	 */
 	public static Genotype createNewGenoTypeTrial5(Genotype lastGeneration) {
 
 		int judgementAge = 10;
@@ -187,6 +191,51 @@ public class GenotypeInnovator {
 			Chromosome child = uniformWeightedCrossover(lastGeneration.population, accumsFitness);
 			bitFlipMutationRealNumberDerivation(child, 0.035f);
 			lastGeneration.population.remove(worst);
+			lastGeneration.population.add(child);
+		}
+
+		if (lastGeneration.population.size() != lastGeneration.getOriginalValueN()) {
+			throw new IllegalArgumentException();
+		}
+
+		return new Genotype(lastGeneration.population);
+	}
+
+	/**
+	 * 
+	 * @param lastGeneration
+	 * @return
+	 * 
+	 * 		Removes randomly from bottom two
+	 * 
+	 */
+	public static Genotype createNewGenoTypeTrial6(Genotype lastGeneration) {
+
+		int judgementAge = 10;
+		boolean allMatureEnough = true;
+		ArrayList<Float> averageFitness = lastGeneration.getAverageFitnessScores();
+		ArrayList<Float> accumsFitness = lastGeneration.getAccumScores();
+
+		for (int i = 0; i < lastGeneration.getOriginalValueN(); i++) {
+			if (lastGeneration.population.get(i).age < judgementAge) {
+				allMatureEnough = false;
+				break;
+			}
+		}
+
+		if (allMatureEnough) {
+			int worst = GeneticUtils.findIndexOfSmallestValue(averageFitness);
+			int secondWorst = GeneticUtils.findIndexOfSmallestValue(averageFitness, new int[] {worst});
+			GeneticUtils.normalizeSetToSumToOne(accumsFitness);
+			Chromosome child = uniformWeightedCrossover(lastGeneration.population, accumsFitness);
+			bitFlipMutationRealNumberDerivation(child, 0.035f);
+			
+			// remove the worst or second worst
+			if (new Random().nextBoolean()) {
+				lastGeneration.population.remove(worst);
+			} else {
+				lastGeneration.population.remove(secondWorst);
+			}
 			lastGeneration.population.add(child);
 		}
 

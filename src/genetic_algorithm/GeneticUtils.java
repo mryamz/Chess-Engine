@@ -1,6 +1,8 @@
 package genetic_algorithm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class GeneticUtils {
 
@@ -80,6 +82,38 @@ public class GeneticUtils {
 		T min = data.get(index);
 
 		for (int i = 0; i < data.size(); i++) {
+			if (data.get(i).compareTo(min) < 0) {
+				index = i;
+				min = data.get(i);
+			}
+		}
+		return index;
+	}
+
+	public static boolean contains(int[] data, int value) {
+		for (int i = 0; i < data.length; i++) {
+			if (data[i] == value)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param data
+	 * @param ignored_indices
+	 *            values to ignore the search for min
+	 * @return
+	 */
+	public static <T extends Number & Comparable<T>> int findIndexOfSmallestValue(ArrayList<T> data, int[] ignored_indices) {
+		int index = 0;
+		T min = data.get(index);
+
+		for (int i = 0; i < data.size(); i++) {
+			// see if we should skip iteration
+			if (contains(ignored_indices, i))
+				continue;
+
 			if (data.get(i).compareTo(min) < 0) {
 				index = i;
 				min = data.get(i);

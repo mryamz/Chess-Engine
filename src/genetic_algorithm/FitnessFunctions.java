@@ -16,8 +16,6 @@ public class FitnessFunctions {
 
 		MultilayerPerceptron white = players.get(i * 2);
 		MultilayerPerceptron black = players.get(i * 2 + 1);
-		// play a game of chess
-		Collections.shuffle(genotype.population);
 		float whiteFitnessValue = 0;
 		float blackFitnessValue = 0;
 
@@ -78,6 +76,8 @@ public class FitnessFunctions {
 
 		Thread[] threads = new Thread[len];
 		boolean[] finished_executing = new boolean[len];
+		
+		Collections.shuffle(genotype.population);
 
 		threads[0] = new Thread(() -> {
 			createThreadSafeMatch(genotype, 0, players);
