@@ -81,7 +81,6 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setUndecorated(true);
 		frame.setContentPane(this);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
