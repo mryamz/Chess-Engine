@@ -87,4 +87,13 @@ public class GeneticUtils {
 		}
 		return index;
 	}
+
+	public static <T extends Number> double getAverage(ArrayList<T> data) {
+		double sum = 0;
+
+		for (T t : data)
+			sum += t.doubleValue();
+
+		return sum / data.size();
+	}
 }

@@ -20,8 +20,8 @@ import chess_engine.entities.BoardElement;
 import chess_engine.structs.OnPawnPromotionListener;
 import chess_engine.structs.OnTurnCompleteListener;
 import chess_engine.structs.ValidMove;
+import genetic_algorithm.GeneticsIO;
 import genetic_algorithm.Genotype;
-import genetic_algorithm.GenotypeInnovator;
 import perceptron.MLPawnPromotionListener;
 import perceptron.MultilayerPerceptron;
 
@@ -45,9 +45,9 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		setPreferredSize(new Dimension(w, h));
 		this.cd = cd;
 		this.deets = deets;
-		
-		Genotype pop = GenotypeInnovator.loadFromFile2("proportional_crossover_with_elites_high_mutation_v1.txt", 65, 2);
-		
+
+		Genotype pop = GeneticsIO.loadFromFile2("proportional_crossover_with_elites_high_mutation_v1.txt", 65, 2);
+
 		ArrayList<MultilayerPerceptron> perceptrons = pop.getPhenotype();
 		whiteCom = perceptrons.get(0);
 		blackCom = perceptrons.get(1);

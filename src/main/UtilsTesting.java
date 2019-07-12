@@ -96,6 +96,14 @@ public class UtilsTesting {
 			System.out.println(nums);
 			System.out.println("Lowest Value is at: [" + GeneticUtils.findIndexOfSmallestValue(nums) + "]");
 		}
+
+		System.out.println("\nTEST 6 - Test average generically");
+
+		{
+			ArrayList<Float> nums = new ArrayList<>(Arrays.asList(5.2f, 5f, 4f, 6f));
+			System.out.println(nums);
+			System.out.println("AVE is " + GeneticUtils.getAverage(nums));
+		}
 	}
 
 }
