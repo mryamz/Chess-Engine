@@ -21,7 +21,7 @@ public class GeneticTest {
 
 			FitnessFunctions.getFitnessTrial3(type);
 
-			// interesting metadata for the log file
+			// interesting metadata for the log file, so far just fitness count
 			int fitCount = 0;
 			for (Float f : type.getFitnessScores()) {
 				if (f != 0)
