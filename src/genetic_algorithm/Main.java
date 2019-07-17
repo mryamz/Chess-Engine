@@ -20,8 +20,8 @@ public class Main {
 
 		reader.close();
 
-		int rolling_ave = 1000;
-		boolean fullest_ave = false;
+		int rolling_ave = 500;
+		boolean fullest_ave = true;
 		
 		for (int i = 0; i < data.size(); i++) {
 			float ave = 0;
