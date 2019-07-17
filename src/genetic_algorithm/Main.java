@@ -21,7 +21,7 @@ public class Main {
 		reader.close();
 
 		int rolling_ave = 500;
-		boolean fullest_ave = true;
+		boolean fullest_ave = false;
 		
 		for (int i = 0; i < data.size(); i++) {
 			float ave = 0;
