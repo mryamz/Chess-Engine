@@ -308,12 +308,12 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		refreshTiles();
 	}
 
-	public MultilayerPerceptron getWhiteCom() {
-		return whiteCom;
+	public void setWhiteCom(MultilayerPerceptron whiteCom) {
+		this.whiteCom = whiteCom;
 	}
-
-	public MultilayerPerceptron getBlackCom() {
-		return blackCom;
+	
+	public void setBlackCom(MultilayerPerceptron blackCom) {
+		this.blackCom = blackCom;
 	}
 	
 	public Chromosome getWhiteChromo() {

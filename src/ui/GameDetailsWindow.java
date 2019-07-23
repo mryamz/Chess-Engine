@@ -41,9 +41,8 @@ public class GameDetailsWindow extends JFrame {
 	private JButton btnApplySettings = new JButton("Apply Settings");
 	private JCheckBox whiteCom = new JCheckBox("white is computer");
 	private JCheckBox blackCom = new JCheckBox("black is computer");
-	
+
 	private GeneEditorWindow editor = new GeneEditorWindow();
-	
 
 	/**
 	 * Create the frame.
@@ -331,14 +330,15 @@ public class GameDetailsWindow extends JFrame {
 		}
 		whitelist.setSelectedIndex(0);
 		blacklist.setSelectedIndex(0);
-		
+
 		editor.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		
+
 		JButton btnModifyOrView = new JButton("Show Chromosome Menu");
 		btnModifyOrView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				editor.setVisible(true);
-				editor.setData(cw.getWhiteCom(), cw.getBlackCom(), cw.getWhiteChromo(), cw.getBlackChromo());
+				if (cw != null)
+					editor.setData(cw, cw.getWhiteChromo(), cw.getBlackChromo());
 			}
 		});
 		GridBagConstraints gbc_btnModifyOrView = new GridBagConstraints();
