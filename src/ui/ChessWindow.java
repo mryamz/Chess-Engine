@@ -20,6 +20,7 @@ import chess_engine.entities.BoardElement;
 import chess_engine.structs.OnPawnPromotionListener;
 import chess_engine.structs.OnTurnCompleteListener;
 import chess_engine.structs.ValidMove;
+import genetic_algorithm.Chromosome;
 import genetic_algorithm.GeneticsIO;
 import genetic_algorithm.Genotype;
 import perceptron.MLPawnPromotionListener;
@@ -37,6 +38,7 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 
 	private boolean isBlackCom, isWhiteCom;
 	private MultilayerPerceptron whiteCom, blackCom;
+	private Chromosome whiteChromo, blackChromo;
 	private int turn = 0;
 
 	private OnTurnCompleteListener standardListner = new OnTurnCompleteListener() {
@@ -63,8 +65,11 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		int gen[] = new int[1];
 		Genotype pop = GeneticsIO.loadSaveFile("save_test.data", gen);
 
-		whiteCom = pop.popMostFitSolution(true).getPerceptron();
-		blackCom = pop.popMostFitSolution(true).getPerceptron();
+		whiteChromo = pop.popMostFitSolution(true);
+		whiteCom = whiteChromo.getPerceptron();
+
+		blackChromo = pop.popMostFitSolution(true);
+		blackCom = blackChromo.getPerceptron();
 
 		cd.addOnTurnCompleteListener(standardListner);
 
@@ -80,7 +85,7 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		thread = new Thread(this);
 		thread.start();
 
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame("Press 'Spacebar' to Show Menu");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setContentPane(this);
 		frame.pack();
@@ -299,6 +304,23 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 
 	public void restartGame() {
 		cd.restart(false);
+		turn = 0;
 		refreshTiles();
+	}
+
+	public MultilayerPerceptron getWhiteCom() {
+		return whiteCom;
+	}
+
+	public MultilayerPerceptron getBlackCom() {
+		return blackCom;
+	}
+	
+	public Chromosome getWhiteChromo() {
+		return whiteChromo;
+	}
+	
+	public Chromosome getBlackChromo() {
+		return blackChromo;
 	}
 }

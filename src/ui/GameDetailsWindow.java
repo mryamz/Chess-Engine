@@ -41,6 +41,9 @@ public class GameDetailsWindow extends JFrame {
 	private JButton btnApplySettings = new JButton("Apply Settings");
 	private JCheckBox whiteCom = new JCheckBox("white is computer");
 	private JCheckBox blackCom = new JCheckBox("black is computer");
+	
+	private GeneEditorWindow editor = new GeneEditorWindow();
+	
 
 	/**
 	 * Create the frame.
@@ -59,9 +62,9 @@ public class GameDetailsWindow extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 20, 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 50, 0, 0 };
 		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 1.0, 1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
 
 		JPanel panel = new JPanel();
@@ -196,9 +199,6 @@ public class GameDetailsWindow extends JFrame {
 		lblSettings.setFont(new Font("Sylfaen", Font.PLAIN, 20));
 		panel_6.add(lblSettings);
 
-		Component verticalStrut = Box.createVerticalStrut(20);
-		panel_6.add(verticalStrut);
-
 		JPanel panel_2 = new JPanel();
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
@@ -280,8 +280,10 @@ public class GameDetailsWindow extends JFrame {
 
 		JPanel panel_5 = new JPanel();
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
+		gbc_panel_5.fill = GridBagConstraints.VERTICAL;
+		gbc_panel_5.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_5.gridx = 0;
-		gbc_panel_5.gridy = 4;
+		gbc_panel_5.gridy = 3;
 		contentPane.add(panel_5, gbc_panel_5);
 
 		rgroup.add(renderBlack);
@@ -329,6 +331,20 @@ public class GameDetailsWindow extends JFrame {
 		}
 		whitelist.setSelectedIndex(0);
 		blacklist.setSelectedIndex(0);
+		
+		editor.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		
+		JButton btnModifyOrView = new JButton("Show Chromosome Menu");
+		btnModifyOrView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editor.setVisible(true);
+				editor.setData(cw.getWhiteCom(), cw.getBlackCom(), cw.getWhiteChromo(), cw.getBlackChromo());
+			}
+		});
+		GridBagConstraints gbc_btnModifyOrView = new GridBagConstraints();
+		gbc_btnModifyOrView.gridx = 0;
+		gbc_btnModifyOrView.gridy = 4;
+		contentPane.add(btnModifyOrView, gbc_btnModifyOrView);
 		setVisible(true);
 
 		OnTurnCompleteListener standard_game_listner = new OnTurnCompleteListener() {
@@ -386,7 +402,7 @@ public class GameDetailsWindow extends JFrame {
 
 	private void updateButtonText() {
 		if (whiteCom.isSelected() && blackCom.isSelected()) {
-			btnApplySettings.setText("Automate Next Move");
+			btnApplySettings.setText("Apply & Automate Next Move");
 		} else {
 			btnApplySettings.setText("Apply Settings");
 		}
