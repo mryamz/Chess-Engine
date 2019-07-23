@@ -31,7 +31,7 @@ public class GeneticTest {
 			System.out.println(String.format("\n---------------\nGen. %s, Div. %s, Pop. %s, Metadata %s: \n---------------\n*                 Name - %s\n*      Instant Fitness - %s\n*  Accumulated Fitness - %s\n*                  Age - %s\n\n-------------------------------------------------", i, GeneticUtils.measure_diverisity(type.population), type.population.size(), fitCount, type.getNames(), type.getFitnessScores(), type.getAccumScores(), type.getAges()));
 
 			GeneticsIO.log("new_test_v4.txt", type, i, type, fitCount, (float) GeneticUtils.getAverage(type.getAccumScores()), (float) GeneticUtils.getAverage(type.getAges()));
-			GeneticsIO.saveGenerationToFile("save_test.data", i, type);
+			GeneticsIO.saveGenerationToFile("save_test_1.data", i, type);
 			type = GenotypeInnovator.createNewGenoTypeTrial6(type);
 		}
 	}

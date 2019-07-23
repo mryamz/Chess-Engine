@@ -1,45 +1,33 @@
 package ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import genetic_algorithm.Chromosome;
-import perceptron.MultilayerPerceptron;
-
-import java.awt.GridBagLayout;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import java.awt.Scrollbar;
-import java.awt.TextArea;
-import java.awt.TextField;
-import java.awt.ScrollPane;
-import javax.swing.JSlider;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-
-import java.awt.Button;
 import javax.swing.JButton;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JRadioButton;
-import java.awt.Font;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JScrollBar;
-import javax.swing.ListModel;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import genetic_algorithm.Chromosome;
 
 public class GeneEditorWindow extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -62,23 +50,30 @@ public class GeneEditorWindow extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_contentPane.rowWeights = new double[] { 1.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_contentPane.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
+		
+		Component verticalGlue_2 = Box.createVerticalGlue();
+		GridBagConstraints gbc_verticalGlue_2 = new GridBagConstraints();
+		gbc_verticalGlue_2.insets = new Insets(0, 0, 5, 0);
+		gbc_verticalGlue_2.gridx = 0;
+		gbc_verticalGlue_2.gridy = 0;
+		contentPane.add(verticalGlue_2, gbc_verticalGlue_2);
 
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.insets = new Insets(0, 0, 5, 0);
 		gbc_panel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 0;
+		gbc_panel.gridy = 1;
 		contentPane.add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 0 };
-		gbl_panel.rowHeights = new int[] { 20, 0, 75, 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 20, 0, 150, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
 		JLabel lblWhitesTraitsEncoded = new JLabel("Edit the Chromosome");
@@ -86,7 +81,7 @@ public class GeneEditorWindow extends JFrame {
 		GridBagConstraints gbc_lblWhitesTraitsEncoded = new GridBagConstraints();
 		gbc_lblWhitesTraitsEncoded.insets = new Insets(0, 0, 5, 0);
 		gbc_lblWhitesTraitsEncoded.gridx = 0;
-		gbc_lblWhitesTraitsEncoded.gridy = 0;
+		gbc_lblWhitesTraitsEncoded.gridy = 1;
 		panel.add(lblWhitesTraitsEncoded, gbc_lblWhitesTraitsEncoded);
 
 		JList<Double> list = new JList<Double>(genes);
@@ -102,7 +97,7 @@ public class GeneEditorWindow extends JFrame {
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 1;
+		gbc_lblNewLabel.gridy = 2;
 		panel.add(lblNewLabel, gbc_lblNewLabel);
 		GridBagConstraints gbc_list = new GridBagConstraints();
 		gbc_list.insets = new Insets(0, 0, 5, 0);
@@ -117,19 +112,19 @@ public class GeneEditorWindow extends JFrame {
 		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
-		gbc_scrollPane.gridy = 2;
+		gbc_scrollPane.gridy = 3;
 		panel.add(scrollPane, gbc_scrollPane);
 
 		GridBagConstraints gbc_lblGeneSelecter = new GridBagConstraints();
 		gbc_lblGeneSelecter.insets = new Insets(0, 0, 5, 0);
 		gbc_lblGeneSelecter.gridx = 0;
-		gbc_lblGeneSelecter.gridy = 3;
+		gbc_lblGeneSelecter.gridy = 4;
 		panel.add(lblGeneSelecter, gbc_lblGeneSelecter);
 		GridBagConstraints gbc_slider = new GridBagConstraints();
 		gbc_slider.fill = GridBagConstraints.HORIZONTAL;
 		gbc_slider.insets = new Insets(0, 0, 5, 0);
 		gbc_slider.gridx = 0;
-		gbc_slider.gridy = 4;
+		gbc_slider.gridy = 5;
 		panel.add(slider, gbc_slider);
 
 		slider.setMaximum(Chromosome.LENGTH - 1);
@@ -147,7 +142,7 @@ public class GeneEditorWindow extends JFrame {
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
 		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_1.gridx = 0;
-		gbc_panel_1.gridy = 5;
+		gbc_panel_1.gridy = 6;
 		panel.add(panel_1, gbc_panel_1);
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
 
@@ -171,19 +166,29 @@ public class GeneEditorWindow extends JFrame {
 		GridBagConstraints gbc_verticalGlue = new GridBagConstraints();
 		gbc_verticalGlue.insets = new Insets(0, 0, 5, 0);
 		gbc_verticalGlue.gridx = 0;
-		gbc_verticalGlue.gridy = 1;
+		gbc_verticalGlue.gridy = 2;
 		contentPane.add(verticalGlue, gbc_verticalGlue);
 
 		JPanel panel_2 = new JPanel();
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_panel_2.gridx = 0;
-		gbc_panel_2.gridy = 2;
+		gbc_panel_2.gridy = 3;
 		contentPane.add(panel_2, gbc_panel_2);
 		panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+		rdbtnEditWhite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeSelection();
+			}
+		});
 
 		rdbtnEditWhite.setSelected(true);
 		panel_2.add(rdbtnEditWhite);
+		rdbtnEditBlack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeSelection();
+			}
+		});
 		panel_2.add(rdbtnEditBlack);
 
 		ButtonGroup rgroup = new ButtonGroup();
@@ -207,15 +212,22 @@ public class GeneEditorWindow extends JFrame {
 		gbc_btnSaveChangesTo.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnSaveChangesTo.insets = new Insets(0, 0, 5, 0);
 		gbc_btnSaveChangesTo.gridx = 0;
-		gbc_btnSaveChangesTo.gridy = 3;
+		gbc_btnSaveChangesTo.gridy = 4;
 		contentPane.add(btnSaveChangesTo, gbc_btnSaveChangesTo);
 
 		JButton btnNewButton = new JButton("View as Phenotype (Neural Network)");
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton.gridx = 0;
-		gbc_btnNewButton.gridy = 4;
+		gbc_btnNewButton.gridy = 5;
 		contentPane.add(btnNewButton, gbc_btnNewButton);
+		
+		Component verticalGlue_1 = Box.createVerticalGlue();
+		GridBagConstraints gbc_verticalGlue_1 = new GridBagConstraints();
+		gbc_verticalGlue_1.gridx = 0;
+		gbc_verticalGlue_1.gridy = 6;
+		contentPane.add(verticalGlue_1, gbc_verticalGlue_1);
 	}
 
 	public void setData(ChessWindow cw, Chromosome black_chromosome, Chromosome white_chromosome) {
@@ -224,6 +236,10 @@ public class GeneEditorWindow extends JFrame {
 		this.cw = cw;
 
 		// handle initial set up
+		changeSelection();
+	}
+	
+	private void changeSelection() {
 		setTitle(String.format("%s's Traits Encoded as Chromosome", rdbtnEditWhite.isSelected() ? "White" : "Black"));
 		genes.clear();
 		Chromosome ref = getSelectedChromo();

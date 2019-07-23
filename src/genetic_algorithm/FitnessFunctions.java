@@ -70,7 +70,7 @@ public class FitnessFunctions {
 		ArrayList<MultilayerPerceptron> players = genotype.getPhenotype();
 
 		int len = genotype.getOriginalValueN() / 2;
-		if (len % 2 != 0 || len != 12) {
+		if (len % 2 != 0 || len != 6) {
 			throw new IllegalArgumentException("Len should be an even number, and for now, it should be 6, not " + len);
 		}
 
