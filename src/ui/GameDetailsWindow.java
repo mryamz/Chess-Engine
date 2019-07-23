@@ -333,7 +333,7 @@ public class GameDetailsWindow extends JFrame {
 
 		editor.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
-		JButton btnModifyOrView = new JButton("Show Chromosome Menu");
+		JButton btnModifyOrView = new JButton("Edit Genes in Realtime");
 		btnModifyOrView.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				editor.setVisible(true);
@@ -342,6 +342,7 @@ public class GameDetailsWindow extends JFrame {
 			}
 		});
 		GridBagConstraints gbc_btnModifyOrView = new GridBagConstraints();
+		gbc_btnModifyOrView.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnModifyOrView.gridx = 0;
 		gbc_btnModifyOrView.gridy = 4;
 		contentPane.add(btnModifyOrView, gbc_btnModifyOrView);

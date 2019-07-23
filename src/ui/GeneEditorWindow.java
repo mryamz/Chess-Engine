@@ -41,10 +41,11 @@ public class GeneEditorWindow extends JFrame {
 	private DefaultListModel<Double> genes = new DefaultListModel<>();
 	private Chromosome black_chromosome, white_chromosome;
 	private ChessWindow cw;
+	private JList<Double> list = new JList<Double>(genes);
 
 	public GeneEditorWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 368);
+		setBounds(100, 100, 450, 574);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -54,7 +55,6 @@ public class GeneEditorWindow extends JFrame {
 		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
-		
 		Component verticalGlue_2 = Box.createVerticalGlue();
 		GridBagConstraints gbc_verticalGlue_2 = new GridBagConstraints();
 		gbc_verticalGlue_2.insets = new Insets(0, 0, 5, 0);
@@ -71,9 +71,9 @@ public class GeneEditorWindow extends JFrame {
 		contentPane.add(panel, gbc_panel);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 0, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 20, 0, 150, 0, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 20, 0, 250, 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
 
 		JLabel lblWhitesTraitsEncoded = new JLabel("Edit the Chromosome");
@@ -84,9 +84,11 @@ public class GeneEditorWindow extends JFrame {
 		gbc_lblWhitesTraitsEncoded.gridy = 1;
 		panel.add(lblWhitesTraitsEncoded, gbc_lblWhitesTraitsEncoded);
 
-		JList<Double> list = new JList<Double>(genes);
+		list.setSelectedIndex(0);
 		list.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
+				if(list.isSelectionEmpty())
+					return;
 				lblGeneSelecter.setText(String.format("Gene: %s", list.getSelectedIndex()));
 				newAlleleValue.setText(("") + getSelectedChromo().getAllele(list.getSelectedIndex()));
 				slider.setValue(list.getSelectedIndex());
@@ -234,18 +236,19 @@ public class GeneEditorWindow extends JFrame {
 		this.black_chromosome = black_chromosome;
 		this.white_chromosome = white_chromosome;
 		this.cw = cw;
-
+		
 		// handle initial set up
 		changeSelection();
 	}
 	
 	private void changeSelection() {
 		setTitle(String.format("%s's Traits Encoded as Chromosome", rdbtnEditWhite.isSelected() ? "White" : "Black"));
-		genes.clear();
+		genes.removeAllElements();
 		Chromosome ref = getSelectedChromo();
 		for (int i = 0; i < Chromosome.LENGTH; i++) {
 			genes.addElement(ref.getAllele(i));
 		}
+		list.setSelectedIndex(slider.getValue());
 	}
 
 	private Chromosome getSelectedChromo() {
