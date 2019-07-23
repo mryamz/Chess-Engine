@@ -39,6 +39,20 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 	private MultilayerPerceptron whiteCom, blackCom;
 	private int turn = 0;
 
+	private OnTurnCompleteListener standardListner = new OnTurnCompleteListener() {
+
+		@Override
+		public void onTurnComplete() {
+			turn++;
+			if (isWhiteCom && !isBlackCom && turn % 2 == 0)
+				doWhiteMove();
+
+			if (isBlackCom && !isWhiteCom && turn % 2 == 1)
+				doBlackMove();
+
+		}
+	};
+
 	public ChessWindow(int w, int h, ChessEngine cd, GameDetailsWindow deets) {
 		image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.createGraphics();
@@ -52,19 +66,7 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		whiteCom = pop.popMostFitSolution(true).getPerceptron();
 		blackCom = pop.popMostFitSolution(true).getPerceptron();
 
-		cd.addOnTurnCompleteListener(new OnTurnCompleteListener() {
-
-			@Override
-			public void onTurnComplete() {
-				turn++;
-				if (isWhiteCom && !isBlackCom && turn % 2 == 0)
-					doWhiteMove();
-
-				if (isBlackCom && !isWhiteCom && turn % 2 == 1)
-					doBlackMove();
-
-			}
-		});
+		cd.addOnTurnCompleteListener(standardListner);
 
 		setUpHuman(BoardElement.TYPE_WHITE);
 		setUpHuman(BoardElement.TYPE_BLACK);
@@ -295,4 +297,8 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 		}
 	}
 
+	public void restartGame() {
+		cd.restart(false);
+		refreshTiles();
+	}
 }

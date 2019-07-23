@@ -160,6 +160,17 @@ public class ChessEngine {
 		return sb.toString();
 	}
 
+	public void restart(boolean clearListeners) {
+		raw_history.clear();
+		chessboard = new Chessboard();
+		turnCount = 0;
+		pgn_history.clear();
+		if (clearListeners) {
+			onTurnCompleteListeners.clear();
+			onGameCompleteListeners.clear();
+		}
+	}
+
 	public ArrayList<ValidMove> getRaw_history() {
 		return raw_history;
 	}

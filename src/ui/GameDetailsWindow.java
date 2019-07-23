@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 import chess_engine.ChessEngine;
 import chess_engine.entities.BoardElement;
 import chess_engine.structs.OnTurnCompleteListener;
+import javax.swing.BoxLayout;
 
 public class GameDetailsWindow extends JFrame {
 
@@ -58,7 +59,7 @@ public class GameDetailsWindow extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] { 0, 0 };
-		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_contentPane.rowHeights = new int[] { 0, 0, 0, 20, 0, 0 };
 		gbl_contentPane.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_contentPane.rowWeights = new double[] { 1.0, 1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		contentPane.setLayout(gbl_contentPane);
@@ -279,7 +280,6 @@ public class GameDetailsWindow extends JFrame {
 
 		JPanel panel_5 = new JPanel();
 		GridBagConstraints gbc_panel_5 = new GridBagConstraints();
-		gbc_panel_5.fill = GridBagConstraints.BOTH;
 		gbc_panel_5.gridx = 0;
 		gbc_panel_5.gridy = 4;
 		contentPane.add(panel_5, gbc_panel_5);
@@ -314,7 +314,14 @@ public class GameDetailsWindow extends JFrame {
 				}
 			}
 		});
+		panel_5.setLayout(new BoxLayout(panel_5, BoxLayout.X_AXIS));
 		panel_5.add(btnApplySettings);
+
+		Component horizontalStrut = Box.createHorizontalStrut(20);
+		panel_5.add(horizontalStrut);
+
+		JButton btnRestartGame = new JButton("Restart Game");
+		panel_5.add(btnRestartGame);
 
 		ArrayList<String> pgns = cd.getValidMovesForTypeAsPGN(BoardElement.TYPE_WHITE);
 		for (String s : pgns) {
@@ -324,7 +331,7 @@ public class GameDetailsWindow extends JFrame {
 		blacklist.setSelectedIndex(0);
 		setVisible(true);
 
-		cd.addOnTurnCompleteListener(new OnTurnCompleteListener() {
+		OnTurnCompleteListener standard_game_listner = new OnTurnCompleteListener() {
 			@Override
 			public void onTurnComplete() {
 				white.removeAllElements();
@@ -355,11 +362,30 @@ public class GameDetailsWindow extends JFrame {
 				whitelist.setSelectedIndex(0);
 				blacklist.setSelectedIndex(0);
 			}
+		};
+
+		cd.addOnTurnCompleteListener(standard_game_listner);
+
+		btnRestartGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				white.removeAllElements();
+				black.removeAllElements();
+				history.clear();
+				whiteBTN.setEnabled(true);
+				blackBTN.setEnabled(false);
+				cw.restartGame();
+				ArrayList<String> pgns = cd.getValidMovesForTypeAsPGN(BoardElement.TYPE_WHITE);
+				for (String s : pgns) {
+					white.addElement(s);
+				}
+				whitelist.setSelectedIndex(0);
+				blacklist.setSelectedIndex(0);
+			}
 		});
 	}
 
 	private void updateButtonText() {
-		if(whiteCom.isSelected() && blackCom.isSelected()) {
+		if (whiteCom.isSelected() && blackCom.isSelected()) {
 			btnApplySettings.setText("Automate Next Move");
 		} else {
 			btnApplySettings.setText("Apply Settings");
