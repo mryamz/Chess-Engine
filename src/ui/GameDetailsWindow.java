@@ -323,6 +323,12 @@ public class GameDetailsWindow extends JFrame {
 
 		JButton btnRestartGame = new JButton("Restart Game");
 		panel_5.add(btnRestartGame);
+		
+		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
+		panel_5.add(horizontalStrut_1);
+		
+		JButton btnViewHeatmap = new JButton("View Heatmap");
+		panel_5.add(btnViewHeatmap);
 
 		ArrayList<String> pgns = cd.getValidMovesForTypeAsPGN(BoardElement.TYPE_WHITE);
 		for (String s : pgns) {
