@@ -25,18 +25,18 @@ public class Resources {
 	private Resources() {
 		try {
 
-			blackBishop = ImageIO.read(Class.class.getResource("/blackBishop.png"));
-			blackKing = ImageIO.read(Class.class.getResource("/blackKing.png"));
-			blackKnight = ImageIO.read(Class.class.getResource("/blackKnight.png"));
-			blackPawn = ImageIO.read(Class.class.getResource("/blackPawn.png"));
-			blackRook = ImageIO.read(Class.class.getResource("/blackRook.png"));
-			blackQueen = ImageIO.read(Class.class.getResource("/blackQueen.png"));
-			whiteBishop = ImageIO.read(Class.class.getResource("/whiteBishop.png"));
-			whiteKing = ImageIO.read(Class.class.getResource("/whiteKing.png"));
-			whiteKnight = ImageIO.read(Class.class.getResource("/whiteKnight.png"));
-			whitePawn = ImageIO.read(Class.class.getResource("/whitePawn.png"));
-			whiteRook = ImageIO.read(Class.class.getResource("/whiteRook.png"));
-			whiteQueen = ImageIO.read(Class.class.getResource("/whiteQueen.png"));
+			blackBishop = ImageIO.read(new File("res/blackBishop.png"));
+			blackKing = ImageIO.read(new File("res/blackKing.png"));
+			blackKnight = ImageIO.read(new File("res/blackKnight.png"));
+			blackPawn = ImageIO.read(new File("res/blackPawn.png"));
+			blackRook = ImageIO.read(new File("res/blackRook.png"));
+			blackQueen = ImageIO.read(new File("res/blackQueen.png"));
+			whiteBishop = ImageIO.read(new File("res/whiteBishop.png"));
+			whiteKing = ImageIO.read(new File("res/whiteKing.png"));
+			whiteKnight = ImageIO.read(new File("res/whiteKnight.png"));
+			whitePawn = ImageIO.read(new File("res/whitePawn.png"));
+			whiteRook = ImageIO.read(new File("res/whiteRook.png"));
+			whiteQueen = ImageIO.read(new File("res/whiteQueen.png"));
 
 		} catch (IOException e) {
 			e.printStackTrace();
