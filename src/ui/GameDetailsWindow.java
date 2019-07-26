@@ -41,6 +41,7 @@ public class GameDetailsWindow extends JFrame {
 	private JButton btnApplySettings = new JButton("Apply Settings");
 	private JCheckBox whiteCom = new JCheckBox("white is computer");
 	private JCheckBox blackCom = new JCheckBox("black is computer");
+	private ChessboardDataVisualizationWindow heatmap;
 
 	private GeneEditorWindow editor = new GeneEditorWindow();
 
@@ -323,11 +324,16 @@ public class GameDetailsWindow extends JFrame {
 
 		JButton btnRestartGame = new JButton("Restart Game");
 		panel_5.add(btnRestartGame);
-		
+
 		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
 		panel_5.add(horizontalStrut_1);
-		
+		heatmap = new ChessboardDataVisualizationWindow(cd.getChessboard());
 		JButton btnViewHeatmap = new JButton("View Heatmap");
+		btnViewHeatmap.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				heatmap.setVisible(true);
+			}
+		});
 		panel_5.add(btnViewHeatmap);
 
 		ArrayList<String> pgns = cd.getValidMovesForTypeAsPGN(BoardElement.TYPE_WHITE);
@@ -417,5 +423,6 @@ public class GameDetailsWindow extends JFrame {
 
 	public void setCW(ChessWindow cw) {
 		this.cw = cw;
+		heatmap.setBoard(cw.getCd().getChessboard());
 	}
 }

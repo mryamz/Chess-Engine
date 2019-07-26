@@ -323,4 +323,8 @@ public class ChessWindow extends JPanel implements Runnable, MouseListener, KeyL
 	public Chromosome getBlackChromo() {
 		return blackChromo;
 	}
+	
+	public ChessEngine getCd() {
+		return cd;
+	}
 }
