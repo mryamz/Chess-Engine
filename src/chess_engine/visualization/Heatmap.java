@@ -30,7 +30,7 @@ public class Heatmap {
 	}
 
 	public BufferedImage grabImage(int width, int height) {
-		ColorMapper mapper = new ColorMapper(width, height, 15);
+		ColorMapper mapper = new ColorMapper(width, height, 15, true);
 		// BufferedImage img = new BufferedImage(width, height,
 		// BufferedImage.TYPE_INT_ARGB);
 		// Graphics2D g = (Graphics2D) img.getGraphics();
